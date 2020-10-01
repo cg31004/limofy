@@ -1,2 +1,2 @@
-# lomofy
+# limofy
 old product by golang
