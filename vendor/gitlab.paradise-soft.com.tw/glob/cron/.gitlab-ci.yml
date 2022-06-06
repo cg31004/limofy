@@ -1,0 +1,16 @@
+image: golang:1.12
+
+stages:
+  - testing
+
+before_script:
+  - go version
+
+run-tests-with-coverage:
+  stage: testing
+  tags:
+    - docker
+  script:
+    - go test -coverprofile=coverage.out.tmp -coverpkg=./...
+    - cat coverage.out.tmp | grep -v -E "mock_*|*_gen.go" > coverage.out
+    - go tool cover -func=coverage.out
