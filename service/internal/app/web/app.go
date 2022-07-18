@@ -10,6 +10,8 @@ import (
 	"go.uber.org/dig"
 
 	"simon/limofy/service/internal/config"
+	"simon/limofy/service/internal/controller/middleware"
+	"simon/limofy/service/internal/thirdparty/errortool"
 	"simon/limofy/service/internal/thirdparty/logger"
 )
 
@@ -32,10 +34,12 @@ type restServiceIn struct {
 	ServiceConf config.IServiceConfig
 	SysLogger   logger.ILogger `name:"sysLogger"`
 	AppLogger   logger.ILogger `name:"appLogger"`
+
+	ResponseMiddleware middleware.IResponseMiddleware
 }
 
 type IService interface {
-	Run()
+	Run(ctx context.Context)
 }
 
 func (s *restService) Run(ctx context.Context) {
@@ -58,6 +62,7 @@ func (s *restService) setRoutes(engine *gin.Engine) {
 		gin.Logger(),
 		gin.Recovery(),
 
+		s.in.ResponseMiddleware.Handle,
 	// cors middleware
 	// response middleware
 	)
@@ -72,7 +77,7 @@ func (s *restService) setPublicRoutes(engine *gin.Engine) {
 
 func (s *restService) setWebRoutes(engine *gin.Engine) {
 	privateRouteGroup := engine.Group("")
-	
+
 	// 設定路由
 	s.setApiRouters(privateRouteGroup)
 }

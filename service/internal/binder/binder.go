@@ -18,8 +18,10 @@ func New() *dig.Container {
 		provideApp(binder)
 		provideConfig(binder)
 		provideController(binder)
-		provideCore(binder)
+		provideCoreUseCase(binder)
+		provideCoreCommon(binder)
 		provideRepository(binder)
+		provideThirdParty(binder)
 	})
 
 	return binder

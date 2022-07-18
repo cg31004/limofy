@@ -28,7 +28,7 @@ type digIn struct {
 
 func NewDefault(in digIn) ILocalCache {
 	return &localCache{
-		c: cache.New(in.AppConf.GetLocalCacheConfig().DefaultExpirationSec*time.Second, 10*time.Second),
+		c: cache.New(time.Duration(in.AppConf.GetLocalCacheConfig().DefaultExpirationSec)*time.Second, 10*time.Second),
 	}
 }
 

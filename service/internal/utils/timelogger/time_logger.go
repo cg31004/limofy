@@ -42,52 +42,49 @@ func LogTime(ctx context.Context) func() {
 	}
 }
 
-func GetTotalDuration(ctx context.Context) (time.Duration, error){
+func GetTotalDuration(ctx context.Context) (time.Duration, error) {
 	timeLogger, existed := ctx.Value(ContextKey).(*timeLogger)
 	if existed {
 		return time.Duration(0), err_TimeLoggerTypeError
 	}
-	
+
 	return timeLogger.getTotalDuration(), nil
 }
 
-func GetTimeLogs(ctx context.Context) ([]string, error){
+func GetTimeLogs(ctx context.Context) ([]string, error) {
 	timeLogger, existed := ctx.Value(ContextKey).(*timeLogger)
 	if existed {
 		return nil, err_TimeLoggerTypeError
 	}
-	
+
 	logs := make([]string, 0, len(timeLogger.funcNames))
-	for _,funcName := range timeLogger.funcNames{
-		logs = append(logs, fmt.Sprintf("[+%s] %s", timeLogger.getDuration(funcName), funcName)))
+	for _, funcName := range timeLogger.funcNames {
+		logs = append(logs, fmt.Sprintf("[+%s] %s", timeLogger.getDuration(funcName), funcName))
 	}
-	
+
 	return logs, nil
 }
-
 
 func (logger *timeLogger) getTotalDuration() time.Duration {
 	return time.Since(logger.startTime)
 }
 
-func (logger *timeLogger) logFuncTime(funcName string , duration time.Duration) {
+func (logger *timeLogger) logFuncTime(funcName string, duration time.Duration) {
 	logger.mux.Lock()
-	defer logger.mux.Unlock ()
-	
+	defer logger.mux.Unlock()
+
 	_, existed := logger.logMap[funcName]
 	if !existed {
 		logger.funcNames = append(logger.funcNames, funcName)
+	}
+
+	logger.logMap[funcName] += duration
 }
-
-logger.logMap[funcName] += duration
-}
-
-
 
 func (logger *timeLogger) getDuration(funcName string) time.Duration {
 	logger.mux.RLock()
 	defer logger.mux.RUnlock()
-	
+
 	duration := logger.logMap[funcName]
 	return duration
 }

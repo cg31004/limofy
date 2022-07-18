@@ -8,10 +8,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
-	"simon_test/oauth/logger"
 
+	"simon/limofy/service/internal/app/web"
 	"simon/limofy/service/internal/binder"
 	"simon/limofy/service/internal/config"
+	"simon/limofy/service/internal/thirdparty/logger"
 )
 
 func Run() {
@@ -29,8 +30,8 @@ type digIn struct {
 	AppConf     config.IAppConfig
 	ServiceConf config.IServiceConfig
 	SysLogger   logger.ILogger `name:"sysLogger"`
-	
-	// WebRestService
+
+	WebRestService web.IService
 }
 
 func initService(in digIn) {
