@@ -1,0 +1,21 @@
+app_config:
+  server_config:
+    time_zone: 8
+  log_config:
+    name: "limofy"
+    env: "local"
+    level: "debug"
+  gin_config:
+    port: ":9487"
+    debug_mode: "true"
+    cors_mode: "false"
+  mysql_config:
+    log_mode: true
+    max_idle: 3
+    max_open: 10
+    conn_max_life_min: 900
+  local_cache_config:
+    default_expiration_sec: 300
+  salt_config:
+    salt_string: "salt"
+    sign: "4.yxysv9e!rga-gu"

@@ -1,0 +1,11 @@
+service_config:
+  mysql_service:
+    address: "localhost:3306"
+    username: "root"
+    password: "abc123"
+    database: "limofy"
+  redis_service:
+    address: "localhost:6711"
+    password: "abc123"
+    db: 0
+    ttl_sec: 86400
